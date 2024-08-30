@@ -1,27 +1,42 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function Login() {
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
+
   const email = useRef();
   const password = useRef();
 
-  const handleSumit = (event) => {
+  function handleSubmit(event) {
+    console.log('hello');
     // prevent default browser behavior
     event.preventDefault();
 
-    const enteredEmail = email.current.value;
+    const enteredEmail = email.current;
     const enteredPassword = password.current.value;
 
-    console.log(enteredEmail, enteredPassword);
-  };
+    const emailIsValid = enteredEmail.value.includes('@');
+
+    if (!emailIsValid) {
+      setEmailIsInvalid(true);
+      console.log('true');
+      return;
+    }
+
+    setEmailIsInvalid(false);
+
+    console.log('Sending HTTP request...');
+
+  }
 
   return (
-    <form onSubmit={handleSumit}>
+    <form onSubmit={handleSubmit}>
       <h2>Login</h2>
 
       <div className="control-row">
         <div className="control no-margin">
           <label htmlFor="email">Email</label>
           <input id="email" type="email" name="email" ref={email} />
+          <div className="control-error">{emailIsInvalid && <p>Please enter a valid email address.</p>}</div>
         </div>
 
         <div className="control no-margin">
